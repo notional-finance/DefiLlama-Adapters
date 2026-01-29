@@ -20,7 +20,9 @@ async function tvl(api) {
   const assets = result.vaults.map(i => i.asset.id)
   const abi = "function totalAssets() view returns (uint256)"
   const data = await api.multiCall({ abi, calls: vaults, permitFailure: true })
-  assets.forEach((a, i) => api.add(a, data[i]))
+  assets.forEach((a, i) => {
+    if (data[i]) api.add(a, data[i])
+  })
 }
 
 Object.keys(CONFIG).forEach((chain) => {
